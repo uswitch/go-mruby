@@ -1,6 +1,6 @@
 MRUBY_COMMIT ?= 1.2.0
 
-all: libmruby.a test
+all: test
 
 clean:
 	rm -rf vendor
@@ -13,17 +13,12 @@ gofmt:
 lint:
 	sh golint.sh
 
-libmruby.a: vendor/mruby
-	cd vendor/mruby && ${MAKE}
-	cp vendor/mruby/build/host/lib/libmruby.a .
-
-vendor/mruby:
-	mkdir -p vendor
-	git clone https://github.com/mruby/mruby.git vendor/mruby
-	cd vendor/mruby && git reset --hard && git clean -fdx
-	cd vendor/mruby && git checkout ${MRUBY_COMMIT}
+lib: mruby-build.rb build.sh
+	./build.sh
+	docker run -it -v "$(shell pwd):/mnt/go-mruby" debian:jessie \
+		/bin/sh -c "apt-get update && apt-get install -y git ruby gcc bison flex make && cd /mnt/go-mruby && ./build.sh"
 
 test: gofmt lint
 	go test -v
 
-.PHONY: all clean libmruby.a test lint
+.PHONY: all clean lib test lint
