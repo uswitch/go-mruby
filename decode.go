@@ -183,7 +183,7 @@ func (d *decoder) decodeInterface(name string, v *MrbValue, result reflect.Value
 	case TypeFloat:
 		var result float64
 		set = reflect.Indirect(reflect.New(reflect.TypeOf(result)))
-	case TypeString:
+	case TypeString, TypeSymbol:
 		set = reflect.Indirect(reflect.New(reflect.TypeOf("")))
 	default:
 		return fmt.Errorf(
@@ -346,7 +346,7 @@ func (d *decoder) decodeString(name string, v *MrbValue, result reflect.Value) e
 	case TypeFixnum:
 		result.Set(reflect.ValueOf(
 			strconv.FormatInt(int64(v.Fixnum()), 10)).Convert(result.Type()))
-	case TypeString:
+	case TypeString, TypeSymbol:
 		result.Set(reflect.ValueOf(v.String()).Convert(result.Type()))
 	default:
 		return fmt.Errorf("%s: unknown type to string: %v", name, t)

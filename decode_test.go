@@ -170,7 +170,10 @@ func TestDecodeInterface(t *testing.T) {
 			`{"foo" => "bar"}`,
 			map[string]interface{}{"foo": "bar"},
 		},
-
+		{
+			`{foo: "bar"}`,
+			map[string]interface{}{"foo": "bar"},
+		},
 		{
 			`{32 => "bar"}`,
 			map[string]interface{}{"32": "bar"},
