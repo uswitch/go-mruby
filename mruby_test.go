@@ -172,6 +172,17 @@ func TestMrbFixnumValue(t *testing.T) {
 	}
 }
 
+func TestMrbSymbolValue(t *testing.T) {
+	mrb := NewMrb()
+	defer mrb.Close()
+
+	value := mrb.SymbolValue("foo")
+	if value.Type() != TypeSymbol {
+		fmt.Println(value.Type())
+		t.Fatalf("should be symbol")
+	}
+}
+
 func TestMrbFullGC(t *testing.T) {
 	mrb := NewMrb()
 	defer mrb.Close()

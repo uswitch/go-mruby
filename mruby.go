@@ -374,6 +374,13 @@ func (m *Mrb) StringValue(s string) *MrbValue {
 	return newValue(m.state, C.mrb_str_new_cstr(m.state, cs))
 }
 
+func (m *Mrb) SymbolValue(s string) *MrbValue {
+	cs := C.CString(s)
+	defer C.free(unsafe.Pointer(cs))
+	sym := C.mrb_intern_cstr(m.state, cs)
+	return newValue(m.state, C.mrb_symbol_value(sym))
+}
+
 func checkException(state *C.mrb_state) error {
 	if state.exc == nil {
 		return nil
