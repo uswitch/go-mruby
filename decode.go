@@ -498,7 +498,13 @@ func (d *decoder) decodeStruct(name string, v *MrbValue, result reflect.Value) e
 func decodeStructHashGetter(mrb *Mrb, h *Hash) decodeStructGetter {
 	return func(key string) (*MrbValue, error) {
 		rbKey := mrb.StringValue(key)
-		return h.Get(rbKey)
+		val, err := h.Get(rbKey)
+
+		if err != nil || val.Type() == TypeNil {
+			return h.Get(mrb.SymbolValue(key))
+		}
+
+		return val, err
 	}
 }
 

@@ -104,6 +104,13 @@ func TestDecode(t *testing.T) {
 			structString{Foo: "bar"},
 		},
 
+		// Struct from Hash
+		{
+			`{:foo => "bar"}`,
+			&outStructString,
+			structString{Foo: "bar"},
+		},
+
 		// Struct from object with methods
 		{
 			testDecodeObjectMethods,
